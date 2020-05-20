@@ -6,19 +6,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.abnamro.assessment.service.PersonService;
 import com.abnamro.assessment.model.Person;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 
 @RestController
 public class PersonController {
 
-    @AutoWired
-    private PersonService personService;
+      private PersonService personService = new PersonService();
     
 
     @GetMapping("/persons")
-    public List<Person> getPersons(){
-       return personService.listFilteredPersons();
+    public List<Person> getPersons() throws Exception{
+        return personService.listFilteredPersons();
     }
 
     @PostMapping("/person")

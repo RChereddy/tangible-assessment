@@ -56,20 +56,26 @@ public class PersonService {
 
     }
 
-    public List<Person> listFilteredPersons() {
+    public List<Person> listFilteredPersons() throws Exception{
          EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
-         String bannedYears = getBannedYears();
+        //  String bannedYears = getBannedYears();
 
-         List<Person> list = (List<Person>)manager.createNativeQuery("Select name from Person where EXTRACT(YEAR FROM birthDate) not in ("+bannedYears+") ", Person.class).getResultList();
-        return Collections.EMPTY_LIST;
+         List<Person> list = (List<Person>)manager.createNativeQuery("Select name from Person where EXTRACT(YEAR FROM birthDate) not in (1982,199) ", Person.class).getResultList();
+        return list;
     }
 
-    private String getBannedYears(){
+    private String getBannedYears() throws Exception{
 
-        Path path = Paths.get("./banned-years");
+        Path path = Paths.get("banned-years");
         Stream<String> lines = Files.lines(path);
-        String str = lines.reduce(s, s+",");
-        return str.substring(0, str.length()-1);
+        StringBuffer sb  =new StringBuffer();
+        lines.forEach(action ->{
+            sb.append(action);
+            sb.append(",");
+        });
+
+        
+        return sb.substring(0, sb.length()-1);
     }
     
 }
